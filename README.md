@@ -1,308 +1,146 @@
-# 黑苹果 四叶草 for 华南 X79 V2
+# Hackintosh Clover for 华南(HUANAN) X79
 
-English Version is [HERE](https://github.com/cheneyveron/clover-x79-e5-2670-gtx650/blob/master/docs/README.md).
+你们期待的中文版在[这里](https://github.com/cheneyveron/clover-x79-e5-2670-gtx650/blob/master/docs/读我.md).
 
-国内同步镜像：https://gitee.com/cheneyveron/clover-x79-e5-2670-gtx650
+# Reward
 
-如果有兴趣探索更快更暴♂力的Ozmosis启动方式，欢迎关注我的新Repo： [黑苹果 Ozmosis for 华南 X79 V2.4X](https://github.com/cheneyveron/ozmosis-huanan-x79-e5-2670)
+This project cost me money and time, so welcome to buy me a cup of tea for my continious maintainance if it helped you. The name list shows at blow.
 
-## 资助
-
-俺花费了一些时间和精力在上面，如果此项目帮助到了您，欢迎来资助我继续完善它。资助名单在最下方。
-
-微信支付后还有个 **留言** 功能。如果只是在付款时填写“求助”而没有再留言，我是联系不上你的喔，下面单独填写的“手机号”我并不能看得见。我的icloud与邮箱是 `我的github用户名@live.cn`。 
-
-注意：这不是有偿协助，俺的时间非常有限，遇到问题请尽量提交issues，自己摸索。
+Note: I'm very busy at work so drop a issue and try to explore it yourself if you have problem.
 
 Paypal : [paypal.me/cheneyveron](https://paypal.me/cheneyveron)
 
-![支付宝与微信支付](https://github.com/cheneyveron/clover-x79-e5-2670-gtx650/blob/master/docs/IMG_0112.jpg)
+![Alipay and Wechat](https://github.com/cheneyveron/clover-x79-e5-2670-gtx650/blob/master/docs/IMG_0112.jpg)
 
-## 硬件详情
+## Change log:
 
-- 主板: 华南金牌 X79 V2.46 ATX
-- CPU：E5-2670 V1 C2
-- 显卡：蓝宝石RX560 75W
-- 内存：32GB 2RX4 DDR3L 1600
-- 声卡：ALC662 V3
-- 网卡：Rtl8100/8600
+2017/09/30: https://github.com/cheneyveron/clover-x79-e5-2670-gtx650/blob/master/docs/chage-log-2017-09-30.md
 
-如今X79只能使用DDR3内存，最高1866MHz，并且E5 v2处理器性价比已经不高。Intel 7系以上处理器性价比极低，新配电脑推荐使用Ryzen + b350主板。
+2017/10/10: Update apfs.efi to avoid log display at startup.
 
-## 变更记录:
+2017/10/28: Add CPU SSDTs(from rampagedev.com) and Add BIOS Flush Tool.
 
-2018/9/26:更新Clover至4674，支持10.14; 更新大量驱动; NvidiaGraphicsFixup替换为WhateverGreen;电脑不在身旁，未详尽测试，可能的问题如下：
+2017/11/22: Fix `OsxAptioFixDrv` issue under 10.13.1
 
-1. Nvidia Web Driver未更新，非免驱卡用户请勿更新。
+I'd recommend you read the change logs before updating.
 
-2018/4/5: 更新Clover至4423，支持10.13.4; 更新大量驱动; 电脑不在身旁，未测试bug，请反馈。
+# Hardware Specifications:
 
-2018/2/7: 更新Realtek 8111驱动; 更新Clover;
+## Matherboard: HUANAN X79
 
-2018/1/17: 更新AppleALC，修复macOS High Sierra更新17C205后不出声音。
+Bios Verion 2.46
 
-2018/1/15:
+Clover Version 4220
 
-1. 添加DSDT补丁支持12核心处理器；
-2. 添加原版BIOS，处理器与内存未超频、未修改DSDT；
-3. 更新Clover到4369；
+Make sure to:
 
-2017/12/18: VoodooHDA换成了AppleALC；更新lilu、CPUFriend；
+- Disable Serial Port
+- Disable VT-d
+- Disable USB ECHI
+- Enable USB XHCI
 
-2017/11/24: 更新了BIOS工具。
+This DSDT and SSDT is valuable. CPU frequency change and USB relies on them.
 
-2017/11/22: 修复10.13.1下安装时的`OsxAptioFixDrv`错误。
+## CPU: E5-2670 v1 C2
 
-2017/10/28: 添加多种CPU的变频SSDT，添加BIOS刷新工具。
+Single CPU
 
-2017/10/10: 更新apfs.efi避免了开机界面打印Log。
+It's better to buy E5-2670 v1 C1 rather than C2 cuz VT-d is useless
 
-# 1 小白食用说明:
+With the updated rom, Frequency change between (1.2 / 1.9 / 2.3 / 2.6 / 3.0 / 3.1 / 3.2 / 3.3), 8-levels.
 
-[进阶说明](https://github.com/cheneyveron/clover-x79-e5-2670-gtx650/blob/master/docs/变更说明.md)
+~~**I'm currently working on it to get more levels.**~~ I have achieved that within a day, cheers!
 
-## 1.1 主板: 华南 X79 V2
+Without flushing the rom, After Installation, run
 
-主板版本 2.46
+`10.12 aicpm patch.command` -> `caches_rebuild.command`
 
-**BIOS版本 2.47**
+before that the frequency will be locked to 2.6 GHz or 1.2 GHz.
 
-四叶草 版本 4369
+Note that for `El Capitan`, you need to run
 
-所有操作前，务必在BIOS中:
+`10.12 aicpm patch.command` -> `AICPMPatch` -> `caches_rebuild.command`
 
-- 关闭串口 (Serial Port)
-- 禁用 VT-d
-- 禁用 USB ECHI
-- 开启 USB XHCI
+## Graphic: GTX 650
 
-### 1.1.1 我能不能刷BIOS？
+Driver free
 
-如果你满足下面的条件：
+Now I use `Lilu.kext` and `NvidiaGraphicsFixup.kext` to void black screen.
 
-- 华南金牌主板（418块钱左右的）
-- ATX版型（大版型）
-- 蓝色内存插槽
+Set SMIBIOS Model to MacPro6,1 now Graphic card can change frequency between 1 and 5 GHz.
 
-那么你可以刷新BIOS。更详细的说明，和刷新方法不属于小白范畴，请阅读上面的“进阶说明”。
+Dota2 is very fluent, that's enough for me :)
 
-#### 1.1.1.1 我的CPU是xxx，显卡是xxx，可以刷吗?
+## Graphic 2: GTX 1050TI
 
-可以。BIOS只与主板有关，与CPU、显卡、键鼠无关。
+**DO NOT INSTALL ANY SYSTEM UPDATE AFTER INSTALLING WEB DRIVER!!!**
 
-#### 1.1.1.2 刷了之后还能装Windows/Linux吗?
+Install the latest Web Driver.
 
-可以。俺把DSDT中的USB命名/CPU部分规范了一下而已。
+In order to install the latest driver for High Sierra, Make sure you have SIP turned on. Otherwise you can install but cannot get graphics acceleration.
 
-### 1.1.2 我需不需要刷新BIOS？
+Add `CsmVideoDxe-64.efi` so that Clover can display 1080P at boot screen.
 
-如果你同时满足下面两个条件：
+But this will slow boot time up to 4 sec.
 
-1. 使用NVIDIA的显卡，并且需要安装NVIDIA Web Driver。
-2. 打算安装macOS High Sierra
+If you do not care about boot resolution but care about speed, just delete `CsmVideoDxe-64.efi`
 
-那么推荐你刷新BIOS，否则CPU将无法变频。
+## Netcard: Rtl8100/8600
 
-其中一项不满足，则**不需要**刷新BIOS。
+Works fine using kext.
 
-因为在High Sierra中，为了安装Web Driver你必须开启SIP。一旦开启SIP，你就不能给系统文件打补丁来解锁msr寄存器了。此寄存器不解锁，则CPU不能变频。
+## Sound card: Reltek ALC662
 
-好好理解一下上面这句话。至于SIP是什么，请阅读上面的“进阶说明”。
+Works fine using VoodooHDA.
 
-### 1.1.3 我和你的主板不完全一样怎么办？
+# Supported Systems:
 
-如果同是X79主板，用我的EFI问题都不大。
+- 10.10 Yosemite: Not tested.
 
-### 1.1.4 我应该放某个DSDT.aml吗？
+- 10.11 El Capitan: Not tested.
 
-如果你不清楚该不该放，那就不要放。
+- 10.12.6 macOS Sierra: Perfect.
 
-在ACPI Patches中我已经添加了足够多的补丁，通常不需要额外再修改DSDT就可以正常安装启动了。
+- 10.13 macOS High Sierra: Perfect.
 
-而且，放了与你硬件不兼容的DSDT会导致一些难以预料的问题。
+# Clover Tips:
 
-不过，SSDT还是要可以放的。
+## BOOTX64.efi and boot matters
 
-## 1.2 CPU变频: E5-2670 v1
+## Kexts:
 
-E5-2670 C2 与 C1的唯一区别，就是C2支持VT-d技术（硬件虚拟化，不是咱们说的VMware使用到的虚拟化技术），而C1不支持。咱们并不能用得到VT-d技术，所以就是白白多花钱了。而对于服务器来说，不支持VT-d的CPU就是有致命缺陷的，基本上白菜价就卖。
+Recommended kexts are in `kexts/other`, while other optional kexts are in `kexts/Other_Optional`.
 
-### 1.2.1 如果你刷新了BIOS：
+## driver64UEFI:
 
-直接安装系统处理器频率就有八档（1.2 / 1.9 / 2.3 / 2.6 / 3.0 / 3.1 / 3.2 / 3.3）。
+Recommended UEFI drivers are in `drivers64UEFI`, optional drivers in case you need are in `driver64UEFI_Optional`.
 
-### 1.2.2 如果你没有刷新BIOS：
+## Fusion Drive:
 
-安装完系统后，按照系统版本去attachments文件夹中寻找相应的解锁MSR的补丁，然后运行：
+Follow this [guide](https://github.com/cheneyveron/clover-x79-e5-2670-gtx650/blob/master/docs/fusion-drive-set-up.md).
 
-`AICPM` -> `caches_rebuild.command`
+## About Solving 10.13 AppleACPIPlatform(MACH Reboot):
 
-对于`El Capitan`系统，你需要运行：
+Just use this updated dsdt.
 
-`AICPM`->`10.11 aicpm patch.command`->`caches_rebuild.command`
+Wanna see my solving process?
 
-否则的话，处理器频率将会锁定在 2.6 GHz 或者 1.2 GHz。
+My [blog](https://www.itmanbu.com/appleacpiplatform.html)(Chinese).
 
-### 1.2.2 如果你的CPU不是E5-2670 V1：
+[PCbeta](http://bbs.pcbeta.com/viewthread-1753833-1-1.html)(aka 远景论坛)(Chinese).
 
-上面这些步骤还是要做的，除此之外，你还需要
+[Insanelymac](http://www.insanelymac.com/forum/topic/326200-new-possibilities-for-x79-appleacpiplatform-panic)(English).
 
-1. 将`EFI/Clover/ACPI/SSDT.aml`文件换成对应处理器的SSDT。
-2. 修改`EFI/Clover/kexts/Other/VoodooTSCSync.kext`中的`Contents/Info.plist`中的`IOCPUNumber`字段的值为`你的CPU线程数-1`，如我的是8核16线程，就填15。
+# Refs:
 
-在`attachments/SSDT-1`中我搜集了一些SSDT，它们未必能用，如果运气不好的话你就需要自己用`ssdtGen.sh`来生成了。
+I stealed from:
 
-在这里感谢 rampagedev.com 提供的SSDT。
+PCBeta: http://bbs.pcbeta.com/viewthread-1720390-1-1.html
 
-更多关于变频的消息，也请阅读上面的“详细修改说明”。
+PCBeta: http://bbs.pcbeta.com/viewthread-1724967-1-1.html
 
-## 1.3 对于NVIDIA显卡
+Tonymacx86.com: https://www.tonymacx86.com/threads/black-screen-with-macpro-6-1-or-imac-15-or-imac-17-system-definition.183113/
 
-请将`config-nvidia-card.plist`改名为`config.plist`。
+And the whole bbs.pcbeta.com insanelymac.com
 
-### 1.3.1 显示器无输出
-
-我在`EFI/Clover/kexts/Other`中使用了 `Lilu.kext` 与 `WhateverGreen.kext` 这俩驱动配合解决“显示器无输出”的问题。你不用任何操作。
-
-### 1.3.2 图形加速
-
-如果装好了系统却没有图形加速效果，安装Web Driver即可。
-
-**装好WEB DRIVER以后切记不要安装系统更新！！！**
-
-在 High Sierra 中，你得开启 SIP 以后才能安装上 Web Driver。如果你不开启 SIP ，也可以强行继续安装，但是装好以后没有图形加速效果。
-
-### 1.3.3 高清启动界面
-
-我在ROM中添加了CsmVideoDxe模块，如果你刷新了BIOS，那么什么都不用做，享受即可。
-
-如果不刷新BIOS，那么手动将`EFI/Clover/driver64UEFI_Optional`下的`CsmVideoDxe.efi`添加到`EFI/Clover/drivers64UEFI`文件夹中即可。
-
-## 1.4 对于AMD显卡
-
-请将`config-amd-card.plist`改名为`config.plist`。
-
-目前350RMB包邮购得蓝宝石RX560 75W版本一张，完美免驱，性能吊打1050Ti，真香。
-
-其他的AMD的显卡也大都很好配置，至少不会因为安装了不当的驱动导致系统崩溃。
-
-## 1.5 网卡: Rtl8100/8600
-
-就是它驱动起来的网卡：`kexts/other/RealtekRTL8111.kext`。
-
-## 1.6 声卡: Reltek ALC662 V3
-
-为了更好的音质，使用了AppleALC驱动。关键Kext为：
-
-`Lilu.kext`、`AppleALC.kext`、`HDAEnabler.kext`。
-
-如果有爆音，尝试在 Clover Configurator -> Boot 中设置为`darkwake=no`。
-
-如果不是ALC662 V3的声卡，可以使用`EFI/Clover/kexts/Optional`中的`VoodooHDA`万能声卡驱动。其中：
-
-VoodooHDA 2.8.9：只支持双声道。
-
-VoodooHDA 2.9.0：支持5.1声道。
-
-# 2 macOS兼容性:
-
-- 10.10 Yosemite: 未测试.
-- 10.11 El Capitan: 未测试.
-- 10.12 macOS Sierra: 良好.
-- 10.13.4 macOS High Sierra: 良好.
-- 10.14 macOS Mojave: 一般.
-
-# 3 其他常见问题
-
-## 3.1 Fusion Drive/Raid如何配置:
-
-见 [这个指南](https://github.com/cheneyveron/clover-x79-e5-2670-gtx650/blob/master/docs/fusion-drive-设置.md).
-
-## 3.2 10.13 AppleACPIPlatform(MACH Reboot)
-
-在本EFI中附带的两个plist中，`ACPI -> Patch`部分有四个补丁名字为`CUU0`到`CUU3`，将他们添加到自己的配置文件中即可。
-
-想看看解决过程？
-
-[俺的博客](https://www.itmanbu.com/appleacpiplatform.html)(中文).
-
-[远景论坛](http://bbs.pcbeta.com/viewthread-1753833-1-1.html)(中文).
-
-[Insanelymac](http://www.insanelymac.com/forum/topic/326200-new-possibilities-for-x79-appleacpiplatform-panic)(英文).
-
-## 3.3 我能更新kexts吗？
-
-其他kexts随便更新，但是`lilu.kext`更新后需要更新CPUFriend.kext、重新生成对应的CPUFriendProvider.kext、更新AppleALC才行。
-
-### 3.3.1 如何更新 AppleALC:
-
-下载新版的`lilu.kext`、`AppleALC.kext`替换`EFI/Clover/kexts`中的即可。
-
-### 3.3.2 如何更新 CPUFriend:
-
-1. 下载新版的`CPUFriend.kext`和CPUFriend的Git仓库
-2. 运行`ResourceConverter.sh`，指定`X79PlatformPlugin.kext`中的`Mac-F60DEB81FF30ACF6.plist`来生成`CPUFriendProvider.kext`
-3. 替换上去即可
-
-## 3.4 Failed getting nvram
-
-原因：你用了不适合的DSDT。
-
-解决方法：删掉`EFI/Clover/ACPI/patched/DSDT.aml`。
-
-## 3.5 Freeing low memory (up tp 0x20000000)...
-
-原因：CPU在释放2MB内存时卡死。
-
-解决方法：先重启试试。如果不行，就尝试将`drivers64UEFI/OsxAptioFix2Drv-free2000.efi`与`driver64UEFI_Optional/OsxAptioFix2Drv-64.efi`互换。
-
-## 3.6 OsxAptioFixDrv...
-
-兄dei，你该更新俺的新版EFI了。
-
-# 4 致谢:
-
-- [Apple](https://www.apple.com)：研发的 macOS 系统
-- [Clover EFI bootloader](https://sourceforge.net/projects/cloverefiboot/)：强大的通用操作系统引导器
-- @[**vit9696**](https://github.com/vit9696)：制作 Lilu & AppleALC
-- [Piker.R.Alpha](https://pikeralpha.wordpress.com/)：对AICPM做出的研究、制作 ssdtPRGen.sh
-- [Alext James](https://alextjam.es/)(@**TheRaceMaster**)：对ACPI表的解析问题的分析
-- @[**PMHeart**](https://github.com/PMheart)：制作 CPUFriend，并热心的帮助了我
-- @[**stinga11**](http://www.insanelymac.com/forum/user/408886-stinga11/)：X79系列CPU变频的研究
-- [Rampage Dev](http://rampagedev.com)：提供的 SSDT
-- @[**shilohh**](https://www.tonymacx86.com/members/shilohh.312762)：解决NVIDIA显卡无输出问题
-- @**flipphos** & @**zouyanggary** & @**jameszhang18910780315**：BIOS方面的资讯
-- @**zouyanggary** & **kaeserlin**：提供的AppleALC方面的资讯
-- [远景论坛](http://bbs.pcbeta.com) & [Tonymacx86](https://www.tonymacx86.com) & [InsanelyMac](http://www.insanelymac.com)：提供交流的场所
-
-## 资助列表：
-
-| 昵称            | 金额    | 备注   | 时间         |
-| ------------- | ----- | ---- | ---------- |
-| C*r          | ￥9.66 | 微信   | 2018.11.1  |
-| 黄海          | ￥6.66 | 微信   | 2018.10.25  |
-| L             | ￥6.66 | 微信   | 2018.9.27  |
-| L             | ￥0.66 | 微信   | 2018.9.26  |
-| Joooohnnnn    | ￥5    | 微信   | 2018.9.21  |
-| C\*e           | ￥10   | 微信   | 2018.6.15  |
-| \*!            | ￥2    | 微信   | 2018.5.16  |
-| \*宾            | ￥10   | 微信   | 2018.5.15  |
-| \*ᝰ            | ￥1    | 微信   | 2018.4.21  |
-| \*空            | ￥50   | 微信   | 2018.4.21  |
-| \*峰            | ￥8.8  | 微信   | 2018.4.20  |
-| [未知]          | ￥10   | 微信   | 2018.4.18  |
-| [未知]          | ￥10   | 微信   | 2018.4.17  |
-| [未知]          | ￥10   | 微信   | 2018.4.10  |
-| AURORA极光映像-冠子 | ￥40   | 微信   | 2018.4.5   |
-| [未知]          | ￥3    | 微信   | 2018.3.9   |
-| [未知]          | ￥10   | 微信   | 2018.2.26  |
-| [未知]          | ￥10   | 微信   | 2018.2.23  |
-| [未知]          | ￥10   | 微信   | 2018.2.20  |
-| 旭顺            | ￥8.88 | 支付宝  | 2018.2.17  |
-| 哈尼            | ￥10   | 微信   | 2018.2.9   |
-| [未知]          | ￥15   | 微信   | 2018.1.25  |
-| JYS           | ￥10   | 微信   | 2018.1.24  |
-| OldMonster    | ￥1    | 微信   | 2018.1.17  |
-| cheng         | ￥1    | 支付宝  | 2017.12.29 |
-| [未知]          | ￥5    | 微信   | 2017.12.25 |
-
+Thank you all for the efforts.
